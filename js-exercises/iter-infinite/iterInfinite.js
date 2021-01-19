@@ -1,53 +1,45 @@
 /*
 Count function
 */
-function* count(...args) {
-  if (typeof value !== "number") {
-    throw new Error("Expected number, received - " + typeof value);
+function* count(start, step = Infinity) {
+  if (typeof start !== "number") {
+    throw new Error("Expected number, received - " + typeof start);
   }
 
-  if (times && typeof times !== "number") {
-    throw new Error("Expected number, received - " + typeof times);
+  if (step && typeof step !== "number") {
+    throw new Error("Expected number, received - " + typeof step);
   }
 
-  let num = value;
-  let limit = times;
-
-  if (limit) {
-    while (limit > 0) {
-      --limit;
-      yield ++num;
-    }
-  } else {
-    while (true) {
-      yield num++;
-    }
+  while(step > 0){
+    yield start;
+    step--;
+    start++;
   }
 }
 
 /*
 Cycle function
 */
-function* cycle(iter, times = Infinity) {
-  while (times > 0) {
+function* cycle(iter, step = Infinity) {
+  while (step > 0) {
     yield* iter;
-    times--;
+    step--;
   }
 }
 
 /* 
 Repeat function
 */
-function* repeat(value, times = Infinity) {
-  if (typeof value !== "number") {
-    throw new Error("Expected number, received - " + typeof value);
+function* repeat(start, step = Infinity) {
+  if (typeof start !== "number") {
+    throw new Error("Expected number, received - " + typeof start);
   }
 
-  if (times && typeof times !== "number") {
-    throw new Error("Expected number, received - " + typeof times);
+  if (step && typeof step !== "number") {
+    throw new Error("Expected number, received - " + typeof step);
   }
 
-  return yield* cycle([value], times);
+  return yield* cycle([start], step);
 }
 
 export { count, cycle, repeat };
