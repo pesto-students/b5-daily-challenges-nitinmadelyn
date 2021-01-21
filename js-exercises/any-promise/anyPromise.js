@@ -1,12 +1,23 @@
 const anyPromise = (promises) => {
-  return new Promise(async (resolve) => {
+  const promisesAll = Array.from(promises);
+  const promisesRejected = [];
+
+  if (promisesAll.length === 0) {
+    return Promise.reject(new Error('AggregateError: Empty input'));
+  }
+
+  return new Promise((resolve, reject) => {
     for (const promise of promises) {
-      await Promise.resolve(promise)
+      Promise.resolve(promise)
         .then((value) => {
           resolve(value);
         })
-        .catch(() => {});
+        .catch((value) => {
+          promisesRejected.push(value);
+          if (promisesRejected.length === promises.length) {
+            reject(promisesRejected);
+          }
+        });
     }
-    resolve("AggregateError: No Promise in anyPromise was resolved");
   });
 };
